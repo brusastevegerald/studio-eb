@@ -57,7 +57,21 @@ Guía paso a paso para subir tu proyecto a GitHub desde cero.
 
 ---
 
-## Paso 5: Comandos para subir el proyecto
+## Paso 5: Configurar tu identidad en Git (solo la primera vez)
+
+Git necesita tu nombre y email para los commits. Ejecutá estos dos comandos **con tu nombre y email real** (el email conviene que sea el de tu cuenta de GitHub):
+
+```bash
+git config --global user.name "Tu Nombre"
+git config --global user.email "tu-email@ejemplo.com"
+```
+
+Ejemplo: `git config --global user.name "María Pérez"` y `git config --global user.email "maria@gmail.com"`.  
+Si no lo hacés, al hacer `git commit` te va a salir "Author identity unknown".
+
+---
+
+## Paso 6: Comandos para subir el proyecto
 
 Copiá y pegá **uno por uno** en la terminal (después de cada uno apretá Enter).
 
@@ -86,7 +100,7 @@ git branch -M main
 
 **5) Conectar esta carpeta con tu repositorio de GitHub**
 
-Reemplazá `TU-USUARIO` por tu usuario de GitHub y `studio-eb` por el nombre del repo que creaste en el Paso 3:
+Reemplazá `TU-USUARIO` por tu usuario de GitHub y `studio-eb` por el nombre del repo que creaste en el Paso 3 (en la guía anterior era Paso 3, ahora Paso 4):
 ```bash
 git remote add origin https://github.com/TU-USUARIO/studio-eb.git
 ```
@@ -106,7 +120,7 @@ git push -u origin main
 
 ---
 
-## Paso 6: Verificar en GitHub
+## Paso 7: Verificar en GitHub
 
 1. Entrá de nuevo en tu repositorio en GitHub (por ejemplo `https://github.com/TU-USUARIO/studio-eb`).
 2. Refrescá la página (F5).
