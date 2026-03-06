@@ -1,3 +1,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Dropdowns/select: fondo oscuro acorde a la paleta */
+select {
+  color-scheme: dark;
+}
+select option {
+  background-color: #0d1321;
+  color: rgb(226 232 240);
+}
+select option:hover,
+select option:focus,
+select option:checked {
+  background: linear-gradient(0deg, rgba(6 182 212 / 0.2), rgba(6 182 212 / 0.1));
+  color: rgb(255 255 255);
+}

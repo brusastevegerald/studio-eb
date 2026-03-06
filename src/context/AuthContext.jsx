@@ -109,6 +109,9 @@ export function AuthProvider({ children }) {
       email: (alumno.email || '').trim().toLowerCase(),
       telefono: (alumno.telefono || '').trim(),
       password: alumno.password || 'studio2024',
+      curso: alumno.curso || '',
+      horario: alumno.horario || '',
+      profesorId: alumno.profesorId || '',
       createdAt: new Date().toISOString(),
     };
     list.push(nuevo);

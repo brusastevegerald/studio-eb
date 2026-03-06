@@ -2,27 +2,32 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Users, Plus, Pencil, Trash2, LogOut } from 'lucide-react';
+import { CURSOS, HORARIOS } from '../data/cursosYHorarios';
 
 const DEFAULT_PASSWORD = 'studio2024';
 
 export default function PanelProfesor() {
-  const { user, logout, getAlumnos, addAlumno, updateAlumno, deleteAlumno } = useAuth();
+  const { user, logout, getAlumnos, getProfesores, addAlumno, updateAlumno, deleteAlumno } = useAuth();
   const [alumnos, setAlumnos] = useState([]);
+  const [profesores, setProfesores] = useState([]);
   const [modal, setModal] = useState(null);
-  const [form, setForm] = useState({ nombre: '', email: '', telefono: '', password: DEFAULT_PASSWORD });
+  const [form, setForm] = useState({ nombre: '', email: '', telefono: '', password: DEFAULT_PASSWORD, curso: '', horario: '', profesorId: '' });
 
-  const load = () => setAlumnos(getAlumnos());
+  const load = () => {
+    setAlumnos(getAlumnos());
+    setProfesores(getProfesores());
+  };
 
   useEffect(() => {
     load();
   }, []);
 
   const openNew = () => {
-    setForm({ nombre: '', email: '', telefono: '', password: DEFAULT_PASSWORD });
+    setForm({ nombre: '', email: '', telefono: '', password: DEFAULT_PASSWORD, curso: '', horario: '', profesorId: '' });
     setModal('new');
   };
   const openEdit = (a) => {
-    setForm({ nombre: a.nombre, email: a.email, telefono: a.telefono || '', password: a.password || DEFAULT_PASSWORD });
+    setForm({ nombre: a.nombre, email: a.email, telefono: a.telefono || '', password: a.password || DEFAULT_PASSWORD, curso: a.curso || '', horario: a.horario || '', profesorId: a.profesorId || '' });
     setModal({ type: 'edit', id: a.id });
   };
   const closeModal = () => setModal(null);
@@ -33,7 +38,7 @@ export default function PanelProfesor() {
     if (modal === 'new') {
       addAlumno({ ...form });
     } else if (modal?.type === 'edit') {
-      updateAlumno(modal.id, { nombre: form.nombre.trim(), email: form.email.trim().toLowerCase(), telefono: form.telefono.trim(), password: form.password || DEFAULT_PASSWORD });
+      updateAlumno(modal.id, { nombre: form.nombre.trim(), email: form.email.trim().toLowerCase(), telefono: form.telefono.trim(), password: form.password || DEFAULT_PASSWORD, curso: form.curso, horario: form.horario, profesorId: form.profesorId });
     }
     load();
     closeModal();
@@ -96,6 +101,9 @@ export default function PanelProfesor() {
                   <p className="font-medium text-white">{a.nombre}</p>
                   <p className="text-sm text-cyan-400">{a.email}</p>
                   {a.telefono && <p className="text-sm text-slate-400">{a.telefono}</p>}
+                  {a.curso && <p className="text-sm text-cyan-300/90 mt-1">Curso: {CURSOS.find((c) => c.id === a.curso)?.nombre || a.curso}</p>}
+                  {a.horario && <p className="text-sm text-slate-400">{a.horario}</p>}
+                  {a.profesorId && <p className="text-xs text-slate-500">Prof: {profesores.find((p) => p.id === a.profesorId)?.nombre || '-'}</p>}
                 </div>
                 <div className="flex gap-2">
                   <button
@@ -163,6 +171,48 @@ export default function PanelProfesor() {
                   onChange={(e) => setForm((f) => ({ ...f, telefono: e.target.value }))}
                   className="w-full px-4 py-2 rounded-xl bg-white/5 border border-cyan-500/20 text-white"
                 />
+              </div>
+              <div>
+                <label className="block text-sm text-slate-400 mb-1">Tipo de curso *</label>
+                <select
+                  value={form.curso}
+                  onChange={(e) => setForm((f) => ({ ...f, curso: e.target.value }))}
+                  className="w-full px-4 py-2 rounded-xl bg-white/5 border border-cyan-500/20 text-white"
+                  required
+                >
+                  <option value="">Seleccionar...</option>
+                  {CURSOS.map((c) => (
+                    <option key={c.id} value={c.id}>{c.nombre}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm text-slate-400 mb-1">Horarios *</label>
+                <select
+                  value={form.horario}
+                  onChange={(e) => setForm((f) => ({ ...f, horario: e.target.value }))}
+                  className="w-full px-4 py-2 rounded-xl bg-white/5 border border-cyan-500/20 text-white"
+                  required
+                >
+                  <option value="">Seleccionar...</option>
+                  {HORARIOS.map((h) => (
+                    <option key={h.id} value={h.label}>{h.label}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm text-slate-400 mb-1">Profesor asignado *</label>
+                <select
+                  value={form.profesorId}
+                  onChange={(e) => setForm((f) => ({ ...f, profesorId: e.target.value }))}
+                  className="w-full px-4 py-2 rounded-xl bg-white/5 border border-cyan-500/20 text-white"
+                  required
+                >
+                  <option value="">Seleccionar...</option>
+                  {profesores.map((p) => (
+                    <option key={p.id} value={p.id}>{p.nombre}</option>
+                  ))}
+                </select>
               </div>
               <div>
                 <label className="block text-sm text-slate-400 mb-1">Contraseña (para que el alumno ingrese)</label>

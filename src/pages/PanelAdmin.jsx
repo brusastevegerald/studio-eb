@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Shield, Users, GraduationCap, Plus, Pencil, Trash2, LogOut } from 'lucide-react';
+import { CURSOS, HORARIOS } from '../data/cursosYHorarios';
 
 const DEFAULT_PASS_ALUMNO = 'studio2024';
 const DEFAULT_PASS_PROFE = 'studio123';
@@ -13,7 +14,7 @@ export default function PanelAdmin() {
   const [tab, setTab] = useState('profesores');
   const [modal, setModal] = useState(null);
   const [formProfe, setFormProfe] = useState({ nombre: '', email: '', password: DEFAULT_PASS_PROFE });
-  const [formAlumno, setFormAlumno] = useState({ nombre: '', email: '', telefono: '', password: DEFAULT_PASS_ALUMNO });
+  const [formAlumno, setFormAlumno] = useState({ nombre: '', email: '', telefono: '', password: DEFAULT_PASS_ALUMNO, curso: '', horario: '', profesorId: '' });
 
   const load = () => {
     setProfesores(getProfesores());
@@ -31,11 +32,11 @@ export default function PanelAdmin() {
     setModal({ type: 'editProfe', id: p.id });
   };
   const openNewAlumno = () => {
-    setFormAlumno({ nombre: '', email: '', telefono: '', password: DEFAULT_PASS_ALUMNO });
+    setFormAlumno({ nombre: '', email: '', telefono: '', password: DEFAULT_PASS_ALUMNO, curso: '', horario: '', profesorId: '' });
     setModal('newAlumno');
   };
   const openEditAlumno = (a) => {
-    setFormAlumno({ nombre: a.nombre, email: a.email, telefono: a.telefono || '', password: a.password || DEFAULT_PASS_ALUMNO });
+    setFormAlumno({ nombre: a.nombre, email: a.email, telefono: a.telefono || '', password: a.password || DEFAULT_PASS_ALUMNO, curso: a.curso || '', horario: a.horario || '', profesorId: a.profesorId || '' });
     setModal({ type: 'editAlumno', id: a.id });
   };
   const closeModal = () => setModal(null);
@@ -53,7 +54,7 @@ export default function PanelAdmin() {
     e.preventDefault();
     if (!formAlumno.nombre.trim() || !formAlumno.email.trim()) return;
     if (modal === 'newAlumno') addAlumno(formAlumno);
-    else if (modal?.type === 'editAlumno') updateAlumno(modal.id, { nombre: formAlumno.nombre.trim(), email: formAlumno.email.trim().toLowerCase(), telefono: formAlumno.telefono.trim(), password: formAlumno.password || DEFAULT_PASS_ALUMNO });
+    else if (modal?.type === 'editAlumno') updateAlumno(modal.id, { nombre: formAlumno.nombre.trim(), email: formAlumno.email.trim().toLowerCase(), telefono: formAlumno.telefono.trim(), password: formAlumno.password || DEFAULT_PASS_ALUMNO, curso: formAlumno.curso, horario: formAlumno.horario, profesorId: formAlumno.profesorId });
     load();
     closeModal();
   };
@@ -142,6 +143,13 @@ export default function PanelAdmin() {
                     <p className="font-medium text-white">{a.nombre}</p>
                     <p className="text-sm text-cyan-400">{a.email}</p>
                     {a.telefono && <p className="text-sm text-slate-400">{a.telefono}</p>}
+                    {(a.curso || a.horario || a.profesorId) && (
+                      <p className="text-xs text-slate-500 mt-1">
+                        {CURSOS.find((c) => c.id === a.curso)?.nombre || a.curso}
+                        {a.horario && ` · ${a.horario}`}
+                        {a.profesorId && ` · ${profesores.find((p) => p.id === a.profesorId)?.nombre || ''}`}
+                      </p>
+                    )}
                   </div>
                   <div className="flex gap-2">
                     <button type="button" onClick={() => openEditAlumno(a)} className="p-2 rounded-lg text-slate-300 hover:bg-cyan-500/20 hover:text-cyan-400"><Pencil className="w-4 h-4" /></button>
@@ -196,6 +204,27 @@ export default function PanelAdmin() {
               <div>
                 <label className="block text-sm text-slate-400 mb-1">Teléfono</label>
                 <input type="tel" value={formAlumno.telefono} onChange={(e) => setFormAlumno((f) => ({ ...f, telefono: e.target.value }))} className="w-full px-4 py-2 rounded-xl bg-white/5 border border-cyan-500/20 text-white" />
+              </div>
+              <div>
+                <label className="block text-sm text-slate-400 mb-1">Tipo de curso</label>
+                <select value={formAlumno.curso} onChange={(e) => setFormAlumno((f) => ({ ...f, curso: e.target.value }))} className="w-full px-4 py-2 rounded-xl bg-white/5 border border-cyan-500/20 text-white">
+                  <option value="">Seleccionar...</option>
+                  {CURSOS.map((c) => <option key={c.id} value={c.id}>{c.nombre}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm text-slate-400 mb-1">Horarios</label>
+                <select value={formAlumno.horario} onChange={(e) => setFormAlumno((f) => ({ ...f, horario: e.target.value }))} className="w-full px-4 py-2 rounded-xl bg-white/5 border border-cyan-500/20 text-white">
+                  <option value="">Seleccionar...</option>
+                  {HORARIOS.map((h) => <option key={h.id} value={h.label}>{h.label}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm text-slate-400 mb-1">Profesor asignado</label>
+                <select value={formAlumno.profesorId} onChange={(e) => setFormAlumno((f) => ({ ...f, profesorId: e.target.value }))} className="w-full px-4 py-2 rounded-xl bg-white/5 border border-cyan-500/20 text-white">
+                  <option value="">Seleccionar...</option>
+                  {profesores.map((p) => <option key={p.id} value={p.id}>{p.nombre}</option>)}
+                </select>
               </div>
               <div>
                 <label className="block text-sm text-slate-400 mb-1">Contraseña</label>
