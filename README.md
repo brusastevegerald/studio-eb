@@ -24,10 +24,11 @@ Sitio web del instituto **STUDIO EB** con diseño moderno, integración con **Me
 
 ## Accesos (login)
 
-- **Profesores:** en la navbar, "Ingresar" → email `profesor@studio.com` y contraseña `studio123`. Desde el panel podés inscribir, editar y eliminar alumnos.
-- **Alumnos:** mismo "Ingresar" con el email y contraseña que les dio el profesor (por defecto `studio2024`). Pueden ver "Mi cuota" y pagar.
+- **Admin:** usuario `carlabrusa` y contraseña `123`. Solo el admin puede registrar profesores y alumnos nuevos.
+- **Profesores:** email y contraseña asignados por el admin. Pueden registrar, editar y eliminar alumnos.
+- **Alumnos:** email y contraseña asignados por el profesor o admin. Solo los alumnos pueden pagar la cuota.
 
-Los alumnos se guardan en el navegador (localStorage). Para cambiar la contraseña de un profesor, editá `src/context/AuthContext.jsx` (variable `PROFESORES`).
+Los profesores y alumnos se guardan en el navegador (localStorage).
 
 ## Imágenes
 
@@ -48,3 +49,15 @@ Ver **[GITHUB.md](GITHUB.md)** para una guía paso a paso (instalar Git, crear e
 ## Publicar online (para que el cliente lo vea)
 
 Ver **[DEPLOY.md](DEPLOY.md)** con los pasos para subir el sitio a **Vercel** o **Netlify** (gratis) y opcionalmente el servidor de pagos a **Render**.
+
+## Actualizar la web cuando hagas cambios
+
+Si ya conectaste el repo con Vercel, cada vez que subas cambios a GitHub la web se actualiza sola. Desde la carpeta del proyecto:
+
+```bash
+git add .
+git commit -m "Descripción del cambio"
+git push
+```
+
+En 1–2 minutos los cambios se verán en la URL de Vercel.

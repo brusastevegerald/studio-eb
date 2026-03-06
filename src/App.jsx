@@ -16,6 +16,7 @@ import Marketing from './pages/Marketing';
 import PagoOk from './pages/PagoOk';
 import PagoPendiente from './pages/PagoPendiente';
 import PanelProfesor from './pages/PanelProfesor';
+import PanelAdmin from './pages/PanelAdmin';
 import MiCuenta from './pages/MiCuenta';
 
 export default function App() {
@@ -26,7 +27,7 @@ export default function App() {
           <Route path="/" element={<StudioLayout />}>
             <Route index element={<Home />} />
             <Route path="ingresar" element={<Login />} />
-            <Route path="pagar-cuota" element={<PagarCuota />} />
+            <Route path="pagar-cuota" element={<ProtectedRoute requireStudent><PagarCuota /></ProtectedRoute>} />
             <Route path="cursos" element={<Cursos />} />
             <Route path="carreras" element={<Carreras />} />
             <Route path="horarios" element={<Horarios />} />
@@ -39,6 +40,7 @@ export default function App() {
             <Route path="mi-cuenta" element={<ProtectedRoute requireStudent><MiCuenta /></ProtectedRoute>} />
           </Route>
           <Route path="/profesor" element={<ProtectedRoute requireTeacher><PanelProfesor /></ProtectedRoute>} />
+          <Route path="/admin" element={<ProtectedRoute requireAdmin><PanelAdmin /></ProtectedRoute>} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </AuthProvider>

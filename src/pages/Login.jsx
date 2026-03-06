@@ -25,10 +25,11 @@ export default function Login() {
       return;
     }
     setLoading(true);
-    const result = login(email.trim(), password);
+    const result = login(email.trim().toLowerCase(), password);
     setLoading(false);
     if (result.ok) {
-      if (result.role === 'teacher') navigate('/profesor', { replace: true });
+      if (result.role === 'admin') navigate('/admin', { replace: true });
+      else if (result.role === 'teacher') navigate('/profesor', { replace: true });
       else navigate('/mi-cuenta', { replace: true });
     } else {
       setError(result.error || 'Error al ingresar.');
@@ -44,23 +45,23 @@ export default function Login() {
           </div>
           <div>
             <h1 className="text-2xl font-bold text-white">Ingresar</h1>
-            <p className="text-slate-400 text-sm">Profesores y alumnos</p>
+            <p className="text-slate-400 text-sm">Admin, profesores y alumnos</p>
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4 p-6 rounded-2xl bg-white/5 border border-cyan-500/20">
+        <form onSubmit={handleSubmit} noValidate className="space-y-4 p-6 rounded-2xl bg-white/5 border border-cyan-500/20">
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-slate-300 mb-1">
-              Email
+              Usuario o email
             </label>
             <input
               id="email"
-              type="email"
+              type="text"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="tu@email.com"
+              placeholder="carlabrusa o tu@email.com"
               className="w-full px-4 py-3 rounded-xl bg-white/5 border border-cyan-500/20 text-white placeholder-slate-500 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
-              autoComplete="email"
+              autoComplete="username"
             />
           </div>
           <div>
@@ -93,7 +94,7 @@ export default function Login() {
         </form>
 
         <p className="text-center text-slate-500 text-sm mt-4">
-          Alumnos: usá el email y contraseña que te dio el profesor.
+          Admin: carlabrusa / 123 — Profesores y alumnos: email y contraseña asignados.
         </p>
       </div>
     </div>

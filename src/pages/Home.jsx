@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { CreditCard, BookOpen, Calendar, Megaphone, Clock, Newspaper, ArrowRight } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
-const SECTIONS = [
+const ALL_SECTIONS = [
   {
     to: '/pagar-cuota',
     title: 'Pagar cuota',
@@ -55,6 +56,9 @@ const GALLERY_PREVIEW = [
 ];
 
 export default function Home() {
+  const { isStudent } = useAuth();
+  const sections = ALL_SECTIONS.filter((s) => s.to !== '/pagar-cuota' || isStudent);
+
   return (
     <>
       <section className="relative overflow-hidden">
@@ -75,12 +79,14 @@ export default function Home() {
               Inscribirme a cursos
               <ArrowRight className="w-4 h-4" />
             </Link>
-            <Link
-              to="/pagar-cuota"
-              className="inline-flex items-center gap-2 px-6 py-3 border border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/10 rounded-xl font-medium transition-colors"
-            >
-              Pagar cuota
-            </Link>
+            {isStudent && (
+              <Link
+                to="/pagar-cuota"
+                className="inline-flex items-center gap-2 px-6 py-3 border border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/10 rounded-xl font-medium transition-colors"
+              >
+                Pagar cuota
+              </Link>
+            )}
           </div>
         </div>
       </section>
@@ -88,7 +94,7 @@ export default function Home() {
       <section className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
         <h2 className="text-2xl sm:text-3xl font-bold text-white mb-8 text-center">¿Qué querés hacer?</h2>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-          {SECTIONS.map(({ to, title, description, icon: Icon, cta }) => (
+          {sections.map(({ to, title, description, icon: Icon, cta }) => (
             <Link
               key={to}
               to={to}
